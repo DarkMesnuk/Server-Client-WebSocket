@@ -43,9 +43,9 @@ namespace Client
         #region Розрахункові параметри для прискорення розрахунків
         public ulong LastPacketNumber { get; private set; }
         public double SumNumber { get; private set; }
+        public List<ulong> Numbers { get; private set; }
         public Dictionary<ulong, ulong> RepetitionsNumbersCount { get; private set; }
-        public double SumOfSquaresOfDifferences { get; private set; }
-        public bool IsRightMedian { get; set; }
+        public double SumOfSquaresOfDifferences { get; set; }
         #endregion
 
         public CalculationsData()
@@ -61,6 +61,7 @@ namespace Client
 
             LastPacketNumber = 0;
             SumNumber = 0;
+            Numbers = new List<ulong>();
             RepetitionsNumbersCount = new Dictionary<ulong, ulong>();
         }
 
@@ -78,15 +79,17 @@ namespace Client
 
             clone.LastPacketNumber = LastPacketNumber;
             clone.SumNumber = SumNumber;
+            clone.Numbers = Numbers;
             clone.RepetitionsNumbersCount = RepetitionsNumbersCount;
 
             return clone;
         }
 
-        public void SetCalculationParameters(ulong lastPacketNumber, double sumNumber, Dictionary<ulong, ulong> repetitionsNumbersCount, double sumOfSquaresOfDifferences)
+        public void SetCalculationParameters(ulong lastPacketNumber, double sumNumber, List<ulong> numbers, Dictionary<ulong, ulong> repetitionsNumbersCount, double sumOfSquaresOfDifferences)
         {
             LastPacketNumber = lastPacketNumber;
             SumNumber = sumNumber;
+            Numbers = numbers;
             RepetitionsNumbersCount = repetitionsNumbersCount;
             SumOfSquaresOfDifferences = sumOfSquaresOfDifferences;
         }
