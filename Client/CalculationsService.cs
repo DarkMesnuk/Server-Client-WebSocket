@@ -11,9 +11,8 @@ namespace Client
             ulong lastPacketNumber = calculationData.LastPacketNumber;
             ulong calculationsPacketCount = calculationData.CalculationsPacketCount;
             double sumNumber = calculationData.SumNumber;
-            var numbers = calculationData.Numbers;
             Dictionary<ulong, ulong> repetitionsNumbersCount = calculationData.RepetitionsNumbersCount;
-            var sumOfSquaresOfDifferences = calculationData.SumOfSquaresOfDifferences;
+            double sumOfSquaresOfDifferences = calculationData.SumOfSquaresOfDifferences;
 
             var newNumbers = new List<ulong>();
 
@@ -65,27 +64,21 @@ namespace Client
             calculationData.AM = average;
             #endregion
 
-            numbers.AddRange(newNumbers);
-
-            #region Медіана
-            numbers.Sort();
-            calculationData.Median = numbers[numbers.Count / 2];
+            #region Мода
+            ulong maxCount = repetitionsNumbersCount.Values.Max();
+            calculationData.Fashion = repetitionsNumbersCount.Where(x => x.Value == maxCount).FirstOrDefault().Key;
             #endregion
 
-            #region Мода
-            ulong maxCount = 0;
-            ulong mode = 0;
+            #region Медіана
+            var numbers = new List<ulong>();
 
-            foreach (ulong numberKey in repetitionsNumbersCount.Keys)
+            for(ulong i = 1; i <= maxCount; i++)
             {
-                if (repetitionsNumbersCount[numberKey] > maxCount)
-                {
-                    maxCount = repetitionsNumbersCount[numberKey];
-                    mode = numberKey;
-                }
+                numbers.AddRange(repetitionsNumbersCount.Where(x => x.Value == i).Select(x => x.Key));
             }
 
-            calculationData.Fashion = mode;
+            numbers.Sort();
+            calculationData.Median = numbers[numbers.Count / 2];
             #endregion
 
             #region Стандартне відхилення
@@ -93,7 +86,7 @@ namespace Client
             calculationData.SD = Math.Sqrt(sumOfSquaresOfDifferences / calculationsPacketCount);
             #endregion
 
-            calculationData.SetCalculationParameters(lastPacketNumber, sumNumber, numbers, repetitionsNumbersCount, sumOfSquaresOfDifferences);
+            calculationData.SetCalculationParameters(lastPacketNumber, sumNumber, repetitionsNumbersCount, sumOfSquaresOfDifferences);
 
             calculationData.CreateString();
 
